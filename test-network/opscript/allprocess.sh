@@ -42,7 +42,11 @@ else
   CC_COLL_CONFIG="--collections-config $CC_COLL_CONFIG"
 fi
 
-
+echo "Eliminando container de chaincodes instalados previamente"
+set -x
+docker rmi -f $(docker images dev-peer* -q);
+set +x
+echo
 echo "INICIANDO PROCESO DE INSTALACION"
 echo "VARIABLES DE ENTORNO:"
 echo ""
