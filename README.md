@@ -7,12 +7,12 @@ A development network with 1 Organization, 1 peer and 1 couchDB.
 Navigate to the test network directory by using the following command:
 
 ```bash
-cd fabric-samples/test-network
+cd fabric-samples
 ```
 
 In this directory, you can find an annotated script, network.sh, that stands up a Fabric network using the Docker images on your local machine.
 
-From inside the test-network directory, run the following command to down network previous runs:
+From inside the fabric-samples directory, run the following command to down network previous runs:
 
 ```bash
 ./network.sh down
@@ -36,16 +36,16 @@ And inside exec a git clone of the traceability chaincode.
 Then to install the chaincode on peer0 you just have to run the allprocess script, ex: ./allprocess.sh #version
 
 ```bash
- ./test-network/opscript/allprocess.sh 0.1
+ ./opscript/allprocess.sh 0.1
 ```
 
 ## Setup Logspout (optional): Monitor peer
 To monitor the logs of the smart contract, an administrator can view the aggregated output from a set of Docker containers using the logspout tool.
 
-Open a new terminal and navigate to the test-network directory.
+Open a new terminal and navigate to the fabric-samples directory.
 
 ```bash
-cd fabric-samples/test-network
+cd fabric-samples
 
 ./monitordocker.sh
 ```
@@ -65,12 +65,12 @@ nano ~/.profile
 export CHANNEL_NAME="channel"
 export CORE_PEER_TLS_ENABLED=true
 export CORE_PEER_LOCALMSPID="Org1MSP"
-export CORE_PEER_TLS_ROOTCERT_FILE=/home/portainer/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
-export CORE_PEER_MSPCONFIGPATH=/home/portainer/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/
+export CORE_PEER_TLS_ROOTCERT_FILE=/home/portainer/fabric-samples/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
+export CORE_PEER_MSPCONFIGPATH=/home/portainer/fabric-samples/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/
 export CORE_PEER_ADDRESS=127.0.0.1:7051
 export ORDERER_ADDRESS=127.0.0.1:7050
 export ORDERER_HOSTNAME=orderer.example.com
-export ORDERER_TLS_CA=/home/portainer/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem
+export ORDERER_TLS_CA=/home/portainer/fabric-samples/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem
 export CC_NAME=traceability
 ```
 If you don't use the blockchain-matcom VM you must modify the paths (CORE_PEER_TLS_ROOTCERT_FILE, CORE_PEER_MSPCONFIGPATH and ORDERER_TLS_CA) with the correct paths

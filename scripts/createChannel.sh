@@ -45,7 +45,7 @@ createChannel() {
 
 # joinChannel ORG
 joinChannel() {
-  FABRIC_CFG_PATH=$PWD/../config/
+  FABRIC_CFG_PATH=$PWD/config/
   ORG=$1
   setGlobals $ORG
 	local rc=1
@@ -71,11 +71,11 @@ setAnchorPeer() {
 
 FABRIC_CFG_PATH=${PWD}/configtx
 
-## Create channeltx
+# ## Create channeltx
 infoln "Generating channel create transaction '${CHANNEL_NAME}.tx'"
 createChannelTx
 
-FABRIC_CFG_PATH=$PWD/../config/
+FABRIC_CFG_PATH=$PWD/config/
 BLOCKFILE="./channel-artifacts/${CHANNEL_NAME}.block"
 
 ## Create channel

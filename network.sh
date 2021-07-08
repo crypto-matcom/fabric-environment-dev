@@ -12,7 +12,7 @@
 #
 # prepending $PWD/../bin to PATH to ensure we are picking up the correct binaries
 # this may be commented out to resolve installed version of tools if desired
-export PATH=${PWD}/../bin:$PATH
+export PATH=${PWD}/bin:$PATH
 export FABRIC_CFG_PATH=${PWD}/configtx
 export VERBOSE=false
 
@@ -52,7 +52,7 @@ function checkPrereqs() {
   ## Check if your have cloned the peer binaries and configuration files.
   peer version > /dev/null 2>&1
 
-  if [[ $? -ne 0 || ! -d "../config" ]]; then
+  if [[ $? -ne 0 || ! -d "./config" ]]; then
     errorln "Peer binary and configuration files not found.."
     errorln
     errorln "Follow the instructions in the Fabric docs to install the Fabric Binaries:"
@@ -263,6 +263,26 @@ function createConsortium() {
 # point the crypto material and genesis block that were created in earlier.
 
 # Bring up the peer and orderer nodes using docker compose.
+function networkMeinerUp() {
+  checkPrereqs
+
+  COMPOSE_FILES="-f ${COMPOSE_FILE_BASE}"
+
+  if [ "${DATABASE}" == "couchdb" ]; then
+    COMPOSE_FILES="${COMPOSE_FILES} -f ${COMPOSE_FILE_COUCH}"
+  fi
+
+  IMAGE_TAG=$IMAGETAG docker-compose ${COMPOSE_FILES} up -d 2>&1
+
+  docker ps -a
+  if [ $? -ne 0 ]; then
+    fatalln "Unable to start network"
+  fi
+
+  # only join channel
+  scripts/createChannel.sh $CHANNEL_NAME $CLI_DELAY $MAX_RETRY $VERBOSE
+}
+
 function networkUp() {
   checkPrereqs
   # generate artifacts if they don't exist
@@ -504,11 +524,12 @@ else
 fi
 
 if [ "${MODE}" == "up" ]; then
-  networkUp
-elif [ "${MODE}" == "createChannel" ]; then
-  createChannel
-elif [ "${MODE}" == "deployCC" ]; then
-  deployCC
+  # networkUp
+  networkMeinerUp
+# elif [ "${MODE}" == "createChannel" ]; then
+  # createChannel
+# elif [ "${MODE}" == "deployCC" ]; then
+  # deployCC
 elif [ "${MODE}" == "down" ]; then
   networkDown
 else
