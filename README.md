@@ -28,8 +28,8 @@ You can then bring up the network by issuing the following command. You will exp
 
 To install the traceability chaincode, create a chaincode ex folder: fabric-samples/chaincode
 ```bash
-	cd fabric-samples
-	mkdir chaincode
+cd fabric-samples
+mkdir chaincode
 ```
 And inside exec a git clone of the traceability chaincode.
 Then to install the chaincode on peer0 you just have to run the allprocess script, ex: ./allprocess.sh #version
@@ -47,10 +47,6 @@ Open a new terminal and navigate to the fabric-samples directory.
 cd fabric-samples
 
 ./monitordocker.sh
-```
-
-```bash
-./network.sh restart
 ```
 
 ## Environment Variable
