@@ -79,6 +79,11 @@ If you don't use the blockchain-matcom VM you must modify the paths (CORE_PEER_T
 From the shell you can invoke the chaincode
 
 ```bash
+// OnlyDev: populate with fake data
+peer chaincode invoke -o $ORDERER_ADDRESS --tls --cafile $ORDERER_TLS_CA -C $CHANNEL_NAME -n $CC_NAME --peerAddresses $CORE_PEER_ADDRESS --tlsRootCertFiles $CORE_PEER_TLS_ROOTCERT_FILE  -c  '{"function":"org.tecnomatica.identity:OnlyDev","Args":[]}'
+```
+
+```bash
 // CreateIssuing
 peer chaincode invoke -o $ORDERER_ADDRESS --tls --cafile $ORDERER_TLS_CA -C $CHANNEL_NAME -n $CC_NAME --peerAddresses $CORE_PEER_ADDRESS --tlsRootCertFiles $CORE_PEER_TLS_ROOTCERT_FILE  -c  '{"function":"org.tecnomatica.identity:CreateIssuing","Args":["{\"name\":\"Autoridad de Certificación Tecnomática\",\"certPem\":\"CertPem\"}"]}'
 ```
@@ -92,3 +97,4 @@ peer chaincode invoke -o $ORDERER_ADDRESS --tls --cafile $ORDERER_TLS_CA -C $CHA
 // GetIdentity
 peer chaincode invoke -o $ORDERER_ADDRESS --tls --cafile $ORDERER_TLS_CA -C $CHANNEL_NAME -n $CC_NAME --peerAddresses $CORE_PEER_ADDRESS --tlsRootCertFiles $CORE_PEER_TLS_ROOTCERT_FILE  -c  '{"function":"org.tecnomatica.identity:GetIdentity","Args":["{\"did\":\"did:vtn:tecnomatica:aa43bdf5b4bcfac88ce9093ec3f0d58290f11c7ef6d2a683a7ee56746b333ec71\"}"]}'
 ```
+
