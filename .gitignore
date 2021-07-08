@@ -21,4 +21,4 @@ build
 package-lock.json
 
 # omit chaincode directories
-chaincode/
+chaincode/*
