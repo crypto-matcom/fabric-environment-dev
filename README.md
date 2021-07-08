@@ -22,7 +22,6 @@ You can then bring up the network by issuing the following command. You will exp
 
 ```bash
 ./network.sh up
-./network.sh createChannel
 ```
 
 ## Install traceability Chaincode

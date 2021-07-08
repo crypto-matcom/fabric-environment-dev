@@ -24,8 +24,8 @@ package-lock.json
 chaincode/*
 
 
-#/channel-artifacts/*.tx
-#/channel-artifacts/*.block
+/channel-artifacts/*.tx
+/channel-artifacts/*.block
 /ledgers
 /ledgers-backup
 /channel-artifacts/*.json
