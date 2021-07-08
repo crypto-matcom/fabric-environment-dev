@@ -47,7 +47,7 @@ Open a new terminal and navigate to the test-network directory.
 ```bash
 cd fabric-samples/test-network
 
-./monitordocker.sh net_test
+./monitordocker.sh
 ```
 
 ```bash
