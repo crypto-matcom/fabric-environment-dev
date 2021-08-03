@@ -24,6 +24,8 @@ You can then bring up the network by issuing the following command. You will exp
 ./network.sh up
 ```
 
+ ❗ As impoortant note, you have to check that the /bin, /script and /chaincode folders has executiuon (+x) permission.
+
 ## Install traceability Chaincode
 
 To install the traceability chaincode, create a chaincode ex folder: fabric-samples/chaincode
