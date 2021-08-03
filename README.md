@@ -24,7 +24,7 @@ You can then bring up the network by issuing the following command. You will exp
 ./network.sh up
 ```
 
- ❗ As impoortant note, you have to check that the /bin, /script and /chaincode folders has executiuon (+x) permission.
+ ❗ As impoortant note, you have to check that the /bin, /script and /chaincode folders has execution (+x) permission.
 
 ## Install traceability Chaincode
 
