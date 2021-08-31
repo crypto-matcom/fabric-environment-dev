@@ -22,6 +22,7 @@ package-lock.json
 
 # omit chaincode directories
 chaincode/*
+!/chaincode/README.md
 
 
 /channel-artifacts/*.tx
