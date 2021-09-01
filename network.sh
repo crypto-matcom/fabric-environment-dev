@@ -105,157 +105,6 @@ function checkPrereqs() {
   fi
 }
 
-# Before you can bring up a network, each organization needs to generate the crypto
-# material that will define that organization on the network. Because Hyperledger
-# Fabric is a permissioned blockchain, each node and user on the network needs to
-# use certificates and keys to sign and verify its actions. In addition, each user
-# needs to belong to an organization that is recognized as a member of the network.
-# You can use the Cryptogen tool or Fabric CAs to generate the organization crypto
-# material.
-
-# By default, the sample network uses cryptogen. Cryptogen is a tool that is
-# meant for development and testing that can quickly create the certificates and keys
-# that can be consumed by a Fabric network. The cryptogen tool consumes a series
-# of configuration files for each organization in the "organizations/cryptogen"
-# directory. Cryptogen uses the files to generate the crypto  material for each
-# org in the "organizations" directory.
-
-# You can also Fabric CAs to generate the crypto material. CAs sign the certificates
-# and keys that they generate to create a valid root of trust for each organization.
-# The script uses Docker Compose to bring up three CAs, one for each peer organization
-# and the ordering organization. The configuration file for creating the Fabric CA
-# servers are in the "organizations/fabric-ca" directory. Within the same directory,
-# the "registerEnroll.sh" script uses the Fabric CA client to create the identities,
-# certificates, and MSP folders that are needed to create the test network in the
-# "organizations/ordererOrganizations" directory.
-
-# Create Organization crypto material using cryptogen or CAs
-function createOrgs() {
-  if [ -d "organizations/peerOrganizations" ]; then
-    rm -Rf organizations/peerOrganizations && rm -Rf organizations/ordererOrganizations
-  fi
-
-  # Create crypto material using cryptogen
-  if [ "$CRYPTO" == "cryptogen" ]; then
-    which cryptogen
-    if [ "$?" -ne 0 ]; then
-      fatalln "cryptogen tool not found. exiting"
-    fi
-    infoln "Generating certificates using cryptogen tool"
-
-    infoln "Creating Org1 Identities"
-
-    set -x
-    cryptogen generate --config=./organizations/cryptogen/crypto-config-org1.yaml --output="organizations"
-    res=$?
-    { set +x; } 2>/dev/null
-    if [ $res -ne 0 ]; then
-      fatalln "Failed to generate certificates..."
-    fi
-
-    # infoln "Creating Org2 Identities"
-
-    # set -x
-    # cryptogen generate --config=./organizations/cryptogen/crypto-config-org2.yaml --output="organizations"
-    # res=$?
-    # { set +x; } 2>/dev/null
-    # if [ $res -ne 0 ]; then
-    #   fatalln "Failed to generate certificates..."
-    # fi
-
-    infoln "Creating Orderer Org Identities"
-
-    set -x
-    cryptogen generate --config=./organizations/cryptogen/crypto-config-orderer.yaml --output="organizations"
-    res=$?
-    { set +x; } 2>/dev/null
-    if [ $res -ne 0 ]; then
-      fatalln "Failed to generate certificates..."
-    fi
-
-  fi
-
-  # Create crypto material using Fabric CA
-  if [ "$CRYPTO" == "Certificate Authorities" ]; then
-    infoln "Generating certificates using Fabric CA"
-
-    IMAGE_TAG=${CA_IMAGETAG} docker-compose -f $COMPOSE_FILE_CA up -d 2>&1
-
-    . organizations/fabric-ca/registerEnroll.sh
-
-  while :
-    do
-      if [ ! -f "organizations/fabric-ca/org1/tls-cert.pem" ]; then
-        sleep 1
-      else
-        break
-      fi
-    done
-
-    infoln "Creating Org1 Identities"
-
-    createOrg1
-
-    # infoln "Creating Org2 Identities"
-
-    # createOrg2
-
-    infoln "Creating Orderer Org Identities"
-
-    createOrderer
-
-  fi
-
-  infoln "Generating CCP files for Org1" # and Org2"
-  ./organizations/ccp-generate.sh
-}
-
-# Once you create the organization crypto material, you need to create the
-# genesis block of the orderer system channel. This block is required to bring
-# up any orderer nodes and create any application channels.
-
-# The configtxgen tool is used to create the genesis block. Configtxgen consumes a
-# "configtx.yaml" file that contains the definitions for the sample network. The
-# genesis block is defined using the "TwoOrgsOrdererGenesis" profile at the bottom
-# of the file. This profile defines a sample consortium, "SampleConsortium",
-# consisting of our two Peer Orgs. This consortium defines which organizations are
-# recognized as members of the network. The peer and ordering organizations are defined
-# in the "Profiles" section at the top of the file. As part of each organization
-# profile, the file points to a the location of the MSP directory for each member.
-# This MSP is used to create the channel MSP that defines the root of trust for
-# each organization. In essence, the channel MSP allows the nodes and users to be
-# recognized as network members. The file also specifies the anchor peers for each
-# peer org. In future steps, this same file is used to create the channel creation
-# transaction and the anchor peer updates.
-#
-#
-# If you receive the following warning, it can be safely ignored:
-#
-# [bccsp] GetDefault -> WARN 001 Before using BCCSP, please call InitFactories(). Falling back to bootBCCSP.
-#
-# You can ignore the logs regarding intermediate certs, we are not using them in
-# this crypto implementation.
-
-# Generate orderer system channel genesis block.
-function createConsortium() {
-  which configtxgen
-  if [ "$?" -ne 0 ]; then
-    fatalln "configtxgen tool not found."
-  fi
-
-  infoln "Generating Orderer Genesis block"
-
-  # Note: For some unknown reason (at least for now) the block file can't be
-  # named orderer.genesis.block or the orderer will fail to launch!
-  set -x
-  configtxgen -profile TwoOrgsOrdererGenesis -channelID system-channel -outputBlock ./system-genesis-block/genesis.block
-  res=$?
-  { set +x; } 2>/dev/null
-  if [ $res -ne 0 ]; then
-    fatalln "Failed to generate orderer genesis block..."
-  fi
-}
-
 # After we create the org crypto material and the system channel genesis block,
 # we can now bring up the peers and ordering service. By default, the base
 # file for creating the network is "docker-compose-test-net.yaml" in the ``docker``
@@ -283,47 +132,6 @@ function networkMeinerUp() {
   scripts/createChannel.sh $CHANNEL_NAME $CLI_DELAY $MAX_RETRY $VERBOSE
 }
 
-function networkUp() {
-  checkPrereqs
-  # generate artifacts if they don't exist
-  if [ ! -d "organizations/peerOrganizations" ]; then
-    createOrgs
-    createConsortium
-  fi
-
-  COMPOSE_FILES="-f ${COMPOSE_FILE_BASE}"
-
-  if [ "${DATABASE}" == "couchdb" ]; then
-    COMPOSE_FILES="${COMPOSE_FILES} -f ${COMPOSE_FILE_COUCH}"
-  fi
-
-  IMAGE_TAG=$IMAGETAG docker-compose ${COMPOSE_FILES} up -d 2>&1
-
-  docker ps -a
-  if [ $? -ne 0 ]; then
-    fatalln "Unable to start network"
-  fi
-}
-
-# call the script to create the channel, join the peers of org1 and org2,
-# and then update the anchor peers for each organization
-function createChannel() {
-  # Bring up the network if it is not already up.
-
-  if [ ! -d "organizations/peerOrganizations" ]; then
-    infoln "Bringing up network"
-    networkUp
-  fi
-
-  # now run the script that creates a channel. This script uses configtxgen once
-  # more to create the channel creation transaction and the anchor peer updates.
-  # configtx.yaml is mounted in the cli container, which allows us to use it to
-  # create the channel artifacts
-  scripts/createChannel.sh $CHANNEL_NAME $CLI_DELAY $MAX_RETRY $VERBOSE
-}
-
-
-## Call the script to deploy a chaincode to the channel
 function deployCC() {
   scripts/deployCC.sh $CHANNEL_NAME $CC_NAME $CC_SRC_PATH $CC_SRC_LANGUAGE $CC_VERSION $CC_SEQUENCE $CC_INIT_FCN $CC_END_POLICY $CC_COLL_CONFIG $CLI_DELAY $MAX_RETRY $VERBOSE
 
@@ -514,12 +322,7 @@ else
 fi
 
 if [ "${MODE}" == "up" ]; then
-  # networkUp
   networkMeinerUp
-# elif [ "${MODE}" == "createChannel" ]; then
-  # createChannel
-# elif [ "${MODE}" == "deployCC" ]; then
-  # deployCC
 elif [ "${MODE}" == "down" ]; then
   networkDown
 else

@@ -45,6 +45,10 @@ createChannel() {
 
 # joinChannel ORG
 joinChannel() {
+  echo ""
+  echo "joinChannel"
+  echo ""
+
   FABRIC_CFG_PATH=$PWD/config/
   ORG=$1
   setGlobals $ORG
@@ -65,8 +69,11 @@ joinChannel() {
 }
 
 setAnchorPeer() {
-  ORG=$1
-  docker exec cli ./scripts/setAnchorPeer.sh $ORG $CHANNEL_NAME 
+    echo ""
+    echo "setAnchorPeer"
+    echo ""
+#  ORG=$1
+  docker exec cli ./scripts/setAnchorPeer.sh 1 $CHANNEL_NAME
 }
 
 FABRIC_CFG_PATH=${PWD}/configtx
@@ -75,6 +82,9 @@ infoln "Using '${CHANNEL_NAME}.tx' channel transaction"
 
 FABRIC_CFG_PATH=$PWD/config/
 BLOCKFILE="./channel-artifacts/${CHANNEL_NAME}.block"
+
+createChannelTx
+createChannel
 
 ## Join all the peers to the channel
 infoln "Joining org1 peer to the channel..."
