@@ -7,7 +7,7 @@ A development network with 1 Organization, 1 peer and 1 couchDB.
 Navigate to the test network directory by using the following command:
 
 ```bash
-cd fabric-samples
+cd fabric-environment-dev
 ```
 
 In this directory, you can find an annotated script, network.sh, that stands up a Fabric network using the Docker images on your local machine.
