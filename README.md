@@ -33,11 +33,11 @@ To install the traceability chaincode, create a chaincode ex folder: fabric-envi
 cd fabric-environment-dev
 mkdir chaincode
 ```
-And inside exec a git clone of the traceability chaincode.
-Then to install the chaincode on peer0 you just have to run the allprocess script, ex: ./allprocess.sh #version
+Once located in the "chaincode" folder, execute an git clone of the traceability chaincode.
+Then to install the chaincode on peer0 you just have to run the following command:
 
 ```bash
- ./opscript/allprocess.sh 0.1
+ ./network.sh deployCC -ccv 1.0.1
 ```
 
 ## Setup Logspout (optional): Monitor peer
