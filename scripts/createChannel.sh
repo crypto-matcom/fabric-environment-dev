@@ -95,3 +95,6 @@ infoln "Setting anchor peer for org1..."
 setAnchorPeer 1
 
 successln "Channel '$CHANNEL_NAME' joined"
+
+docker ps -a
+infoln

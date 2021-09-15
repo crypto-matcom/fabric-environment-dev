@@ -123,7 +123,7 @@ function deployCC() {
 # Tear down running network
 function networkDown() {
   # stop org3 containers also in addition to org1 and org2, in case we were running sample to add org3
-  docker-compose -f $COMPOSE_FILE_BASE -f $COMPOSE_FILE_COUCH -f $COMPOSE_FILE_CA down --volumes --remove-orphans
+  docker-compose -f $COMPOSE_FILE_BASE -f $COMPOSE_FILE_COUCH down --volumes --remove-orphans
 
   docker stop $(docker ps -a -q); docker rm -f $(docker ps -aq); docker volume prune; docker network prune; \
   docker rmi $(docker images dev-peer* -q); docker images -a; docker ps -a; docker volume ls
@@ -141,8 +141,6 @@ function networkDown() {
 # Obtain the OS and Architecture string that will be used to select the correct
 # native binaries for your platform, e.g., darwin-amd64 or linux-amd64
 OS_ARCH=$(echo "$(uname -s | tr '[:upper:]' '[:lower:]' | sed 's/mingw64_nt.*/windows/')-$(uname -m | sed 's/x86_64/amd64/g')" | awk '{print tolower($0)}')
-# Using crpto vs CA. default is cryptogen
-CRYPTO="cryptogen"
 # timeout duration - the duration the CLI should wait for a response from
 # another container before giving up
 MAX_RETRY=5
@@ -151,7 +149,7 @@ CLI_DELAY=3
 # channel name defaults to "channel"
 CHANNEL_NAME="channel"
 # chaincode name defaults to "NA"
-CC_NAME="NA"
+CC_NAME="traceability"
 # chaincode path defaults to "NA"
 CC_SRC_PATH="NA"
 # endorsement policy defaults to "NA". This would allow chaincodes to use the majority default policy.
@@ -167,7 +165,7 @@ COMPOSE_FILE_COUCH=docker/docker-compose-couch.yaml
 # chaincode language defaults to "NA"
 CC_SRC_LANGUAGE="NA"
 # Chaincode version
-CC_VERSION="1.0"
+CC_VERSION="1.0.0"
 # Chaincode definition sequence
 CC_SEQUENCE=1
 # default image tag
@@ -191,73 +189,17 @@ else
   shift
 fi
 
-# parse a createChannel subcommand if used
-if [[ $# -ge 1 ]] ; then
-  key="$1"
-  if [[ "$key" == "createChannel" ]]; then
-      export MODE="createChannel"
-      shift
-  fi
-fi
-
 # parse flags
 
 while [[ $# -ge 1 ]] ; do
   key="$1"
   case $key in
-  -h )
-    printHelp $MODE
-    exit 0
-    ;;
-  -ca )
-    CRYPTO="Certificate Authorities"
-    ;;
-  -r )
-    MAX_RETRY="$2"
-    shift
-    ;;
-  -d )
-    CLI_DELAY="$2"
-    shift
-    ;;
-  -s )
-    DATABASE="$2"
-    shift
-    ;;
-  -ccl )
-    CC_SRC_LANGUAGE="$2"
-    shift
-    ;;
   -ccn )
     CC_NAME="$2"
     shift
     ;;
   -ccv )
     CC_VERSION="$2"
-    shift
-    ;;
-  -ccs )
-    CC_SEQUENCE="$2"
-    shift
-    ;;
-  -ccp )
-    CC_SRC_PATH="$2"
-    shift
-    ;;
-  -ccep )
-    CC_END_POLICY="$2"
-    shift
-    ;;
-  -cccg )
-    CC_COLL_CONFIG="$2"
-    shift
-    ;;
-  -cci )
-    CC_INIT_FCN="$2"
-    shift
-    ;;
-  -verbose )
-    VERBOSE=true
     shift
     ;;
   * )
@@ -269,25 +211,13 @@ while [[ $# -ge 1 ]] ; do
   shift
 done
 
-# Are we generating crypto material with this command?
-if [ ! -d "organizations/peerOrganizations" ]; then
-  CRYPTO_MODE="with crypto from '${CRYPTO}'"
-else
-  CRYPTO_MODE=""
-fi
-
 # Determine mode of operation and printing out what we asked for
 if [ "$MODE" == "up" ]; then
-  infoln "Starting nodes with CLI timeout of '${MAX_RETRY}' tries and CLI delay of '${CLI_DELAY}' seconds and using database '${DATABASE}' ${CRYPTO_MODE}"
-elif [ "$MODE" == "createChannel" ]; then
-  infoln "Creating channel '${CHANNEL_NAME}'."
-  infoln "If network is not up, starting nodes with CLI timeout of '${MAX_RETRY}' tries and CLI delay of '${CLI_DELAY}' seconds and using database '${DATABASE} ${CRYPTO_MODE}"
+  infoln "Starting nodes with CLI timeout of '${MAX_RETRY}' tries and CLI delay of '${CLI_DELAY}' seconds and using database '${DATABASE}'"
 elif [ "$MODE" == "down" ]; then
   infoln "Stopping network"
-elif [ "$MODE" == "restart" ]; then
-  infoln "Restarting network"
 elif [ "$MODE" == "deployCC" ]; then
-  infoln "deploying chaincode on channel '${CHANNEL_NAME}'"
+  infoln "deploying '${CC_NAME}' chaincode version '${CC_VERSION}'' on channel '${CHANNEL_NAME}'"
 else
   printHelp
   exit 1
@@ -297,6 +227,8 @@ if [ "${MODE}" == "up" ]; then
   networkMeinerUp
 elif [ "${MODE}" == "down" ]; then
   networkDown
+elif [ "${MODE}" == "deployCC" ]; then
+  opscript/allprocess.sh ${CC_VERSION}
 else
   printHelp
   exit 1

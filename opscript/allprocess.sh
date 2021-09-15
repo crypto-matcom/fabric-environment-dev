@@ -10,6 +10,7 @@ verifyResult() {
   fi
 }
 
+export FABRIC_CFG_PATH="/home/portainer/fabric-samples/config/"
 export CHANNEL_NAME="channel"
 export CORE_PEER_TLS_ENABLED=true
 export CORE_PEER_LOCALMSPID="Org1MSP"
@@ -48,13 +49,14 @@ docker rmi -f $(docker images dev-peer* -q);
 set +x
 echo
 echo "INICIANDO PROCESO DE INSTALACION"
+echo
 echo "VARIABLES DE ENTORNO:"
 echo ""
-echo "CHAINCODE NAME: ${CC_NAME}"
-echo "CHAINCODE LABEL: ${CC_LABEL}"
-echo "CHAINCODE VERSION: ${CC_VERSION}"
-# echo "CHAINCODE POLICY: ${CC_END_POLICY}"
-echo "CHAINCODE CARPETA RAIZ: ${CC_SRC_PATH_ROOT}"
+echo "    CHAINCODE NAME: ${CC_NAME}"
+echo "    CHAINCODE LABEL: ${CC_LABEL}"
+echo "    CHAINCODE VERSION: ${CC_VERSION}"
+# echo "    CHAINCODE POLICY: ${CC_END_POLICY}"
+echo "    CHAINCODE CARPETA RAIZ: ${CC_SRC_PATH_ROOT}"
 
 
 cd $CC_SRC_PATH_ROOT
