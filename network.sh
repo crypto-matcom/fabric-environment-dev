@@ -13,7 +13,8 @@
 # prepending $PWD/../bin to PATH to ensure we are picking up the correct binaries
 # this may be commented out to resolve installed version of tools if desired
 export PATH=${PWD}/bin:$PATH
-export FABRIC_CFG_PATH=${PWD}/configtx
+# export FABRIC_CFG_PATH=${PWD}/configtx
+export FABRIC_CFG_PATH="/home/portainer/fabric-samples/config/"
 export VERBOSE=false
 
 . scripts/utils.sh
@@ -217,7 +218,9 @@ if [ "$MODE" == "up" ]; then
 elif [ "$MODE" == "down" ]; then
   infoln "Stopping network"
 elif [ "$MODE" == "deployCC" ]; then
-  infoln "deploying '${CC_NAME}' chaincode version '${CC_VERSION}'' on channel '${CHANNEL_NAME}'"
+  infoln "deploying '${CC_NAME}' chaincode version '${CC_VERSION}'' on -- '${CHANNEL_NAME}' -- channel "
+elif [ "$MODE" == "listCC" ]; then
+  infoln "listing all chaincodes installed on -- '${CHANNEL_NAME}' -- channel"
 else
   printHelp
   exit 1
@@ -229,6 +232,8 @@ elif [ "${MODE}" == "down" ]; then
   networkDown
 elif [ "${MODE}" == "deployCC" ]; then
   opscript/allprocess.sh ${CC_VERSION} ${CC_NAME}
+elif [ "$MODE" == "listCC" ]; then
+  peer lifecycle chaincode queryinstalled
 else
   printHelp
   exit 1

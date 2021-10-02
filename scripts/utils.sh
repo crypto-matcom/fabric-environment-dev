@@ -35,6 +35,7 @@ function printHelp() {
     println "    Modes:"
     println "      \033[0;32mup\033[0m - Bring up Fabric orderer and peer nodes. Channel is created"
     println "      \033[0;32mdeployCC\033[0m - Deploy a chaincode"
+    println "      \033[0;32mlistCC\033[0m - List chaincodes installed"
     println "      \033[0;32mdown\033[0m - Bring down the network"
     println
     println "    Used with \033[0;32mnetwork.sh deployCC\033[0m"
@@ -45,6 +46,7 @@ function printHelp() {
     println "   network.sh up"
     println "   network.sh down"
     println "   network.sh deployCC -ccv 1.0.1"
+    println "   network.sh listCC"
     # println "   network.sh deployCC -ccn traceability -ccv 1.0.1"
   fi
 }
