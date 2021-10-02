@@ -25,13 +25,16 @@ export ORDERER_TLS_CA=/home/portainer/fabric-samples/organizations/ordererOrgani
 CC_VERSION="$1"
 : ${CC_VERSION:="0.1"}
 
-INIT_REQUIRED="$2"
+CC_NAME="$2"
+: ${CC_NAME:="traceability"}
+
+INIT_REQUIRED="$3"
 : ${INIT_REQUIRED:=""}
 
 CC_COLL_CONFIG=${4:-"NA"}
 
 export CC_VERSION
-export CC_NAME=traceability
+export CC_NAME
 export CC_SRC_PATH_ROOT=/home/portainer/fabric-samples/chaincode
 export CC_SRC_PATH="${CC_SRC_PATH_ROOT}/"
 export CC_LABEL="${CC_NAME}_${CC_VERSION}"

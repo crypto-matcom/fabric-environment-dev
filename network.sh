@@ -228,7 +228,7 @@ if [ "${MODE}" == "up" ]; then
 elif [ "${MODE}" == "down" ]; then
   networkDown
 elif [ "${MODE}" == "deployCC" ]; then
-  opscript/allprocess.sh ${CC_VERSION}
+  opscript/allprocess.sh ${CC_VERSION} ${CC_NAME}
 else
   printHelp
   exit 1
