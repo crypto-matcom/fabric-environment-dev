@@ -46,6 +46,7 @@ function printHelp() {
     println "   network.sh up"
     println "   network.sh down"
     println "   network.sh deployCC -ccv 1.0.1"
+    println "   network.sh deployCC -ccv 1.0.1 -ccn evote"
     println "   network.sh listCC"
     # println "   network.sh deployCC -ccn traceability -ccv 1.0.1"
   fi
