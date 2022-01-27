@@ -44,7 +44,7 @@ updateAnchorPeer() {
     echo "updateAnchorPeer"
     echo ""
 
-  peer channel update -o orderer.example.com:7050 --ordererTLSHostnameOverride orderer.example.com -c $CHANNEL_NAME -f ${CORE_PEER_LOCALMSPID}anchors.tx --tls --cafile $ORDERER_CA >&log.txt
+  peer channel update -o orderer.example.com:7050 --ordererTLSHostnameOverride orderer.example.com -c $CHANNEL_NAME -f ${CORE_PEER_LOCALMSPID}anchors.tx --tls --cafile $ORDERER_TLS_CA >&log.txt
   res=$?
   cat log.txt
   verifyResult $res "Anchor peer update failed"
