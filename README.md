@@ -1,6 +1,6 @@
 ## Running the test network
 
-Development environment for the ***fuel traceability*** project.
+Development environment for ***fabric*** projects.
 
 A development network with 1 Organization, 1 peer and 1 couchDB.
 
@@ -26,19 +26,30 @@ You can then bring up the network by issuing the following command. You will exp
 
  ❗ As impoortant note, you have to check that the /bin, /script and /chaincode folders has execution (+x) permission.
 
-## Install traceability Chaincode
+## Install Chaincode
 
-To install the traceability chaincode, create a chaincode ex folder: fabric-environment-dev/chaincode
-```bash
-cd fabric-environment-dev
-mkdir chaincode
-```
-Once located in the "chaincode" folder, execute an git clone of the traceability chaincode.
-Then to install the chaincode on peer0 you just have to run the following command:
+The chaincode(s) must be located in the _chaincode_ folder. The chaincode folder name must comply with the following encoding rule: cc-__foldername__-go.
+
+for example: cc-traceability-go
 
 ```bash
- ./network.sh deployCC -ccv 1.0.1
+cd ./chaincode
 ```
+Once located in the "__chaincode__" folder, execute a __git clone__ of the chaincode.
+Then to install the chaincode on __peer0__ you just have to run the following command:
+
+```bash
+ ./network.sh deployCC -ccv 1.0.1 -ccn chaincode_name
+```
+
+```bash
+# for example:
+
+ ./network.sh deployCC -ccv 0.1 -ccn traceability
+```
+The above command installs the traceability chaincode which is in the chaincode folder and is called __cc-traceability-go__
+
+The value of the -ccn parameter is the name of the chaincode folder without the cc- and without the -go.
 
 ## Setup Logspout (optional): Monitor peer
 To monitor the logs of the smart contract, an administrator can view the aggregated output from a set of Docker containers using the logspout tool.
@@ -76,22 +87,9 @@ If you don't use the blockchain-matcom VM you must modify the paths (CORE_PEER_T
 From the shell you can invoke the chaincode
 
 ```bash
-// OnlyDev: populate with fake data
-peer chaincode invoke -o $ORDERER_ADDRESS --tls --cafile $ORDERER_TLS_CA -C $CHANNEL_NAME -n $CC_NAME --peerAddresses $CORE_PEER_ADDRESS --tlsRootCertFiles $CORE_PEER_TLS_ROOTCERT_FILE  -c  '{"function":"org.tecnomatica.identity:OnlyDev","Args":[]}'
+// example:
+
+peer chaincode invoke -c '{"function":"chaincode_name:TransactionExample","Args":[]}' -o $ORDERER_ADDRESS --tls --cafile $ORDERER_TLS_CA -C $CHANNEL_NAME -n $CC_NAME --peerAddresses $CORE_PEER_ADDRESS --tlsRootCertFiles $CORE_PEER_TLS_ROOTCERT_FILE 
 ```
 
-```bash
-// CreateIssuing
-peer chaincode invoke -o $ORDERER_ADDRESS --tls --cafile $ORDERER_TLS_CA -C $CHANNEL_NAME -n $CC_NAME --peerAddresses $CORE_PEER_ADDRESS --tlsRootCertFiles $CORE_PEER_TLS_ROOTCERT_FILE  -c  '{"function":"org.tecnomatica.identity:CreateIssuing","Args":["{\"name\":\"Autoridad de Certificación Tecnomática\",\"certPem\":\"CertPem\"}"]}'
-```
-
-```bash
-// CreateIdentity
-peer chaincode invoke -o $ORDERER_ADDRESS --tls --cafile $ORDERER_TLS_CA -C $CHANNEL_NAME -n $CC_NAME --peerAddresses $CORE_PEER_ADDRESS --tlsRootCertFiles $CORE_PEER_TLS_ROOTCERT_FILE  -c  '{"function":"org.tecnomatica.identity:CreateIdentity","Args":["{\"did\":\"did:vtn:tecnomatica:aa43bdf5b4bcfac88ce9093ec3f0d58290f11c7ef6d2a683a7ee56746b333ec71\",\"certPem\":\"CertPem\"}"]}'
-```
-
-```bash
-// GetIdentity
-peer chaincode invoke -o $ORDERER_ADDRESS --tls --cafile $ORDERER_TLS_CA -C $CHANNEL_NAME -n $CC_NAME --peerAddresses $CORE_PEER_ADDRESS --tlsRootCertFiles $CORE_PEER_TLS_ROOTCERT_FILE  -c  '{"function":"org.tecnomatica.identity:GetIdentity","Args":["{\"did\":\"did:vtn:tecnomatica:aa43bdf5b4bcfac88ce9093ec3f0d58290f11c7ef6d2a683a7ee56746b333ec71\"}"]}'
-```
 
