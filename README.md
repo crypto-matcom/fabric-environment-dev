@@ -86,7 +86,6 @@ export ORDERER_HOSTNAME=orderer.example.com
 export ORDERER_TLS_CA=${FABRIC_ENV_DEV}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem
 export CC_NAME=traceability
 ```
-If you don't use the blockchain-matcom VM you must modify the paths (CORE_PEER_TLS_ROOTCERT_FILE, CORE_PEER_MSPCONFIGPATH and ORDERER_TLS_CA) with the correct paths
 
 ## Interacting with chaincode
 From the shell you can invoke the chaincode
