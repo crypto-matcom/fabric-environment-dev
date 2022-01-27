@@ -70,10 +70,13 @@ nano ~/.profile
 ```
 
 ```bash
+export FABRIC_ENV_DEV=${HOME}/fabric-environment-dev
+export PATH=${FABRIC_ENV_DEV}/bin:$PATH
+
+
 export CHANNEL_NAME="channel"
 export CORE_PEER_TLS_ENABLED=true
 export CORE_PEER_LOCALMSPID="Org1MSP"
-export FABRIC_ENV_DEV="/home/portainer/fabric-environment-dev"
 export FABRIC_CFG_PATH=${FABRIC_ENV_DEV}/config/
 export CORE_PEER_TLS_ROOTCERT_FILE=${FABRIC_ENV_DEV}/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
 export CORE_PEER_MSPCONFIGPATH=${FABRIC_ENV_DEV}/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/
