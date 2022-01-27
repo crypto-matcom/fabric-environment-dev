@@ -14,7 +14,7 @@
 # this may be commented out to resolve installed version of tools if desired
 export PATH=${PWD}/bin:$PATH
 # export FABRIC_CFG_PATH=${PWD}/configtx
-export FABRIC_CFG_PATH="/home/portainer/fabric-samples/config/"
+#export FABRIC_CFG_PATH="/home/portainer/fabric-samples/config/"
 export VERBOSE=false
 
 . scripts/utils.sh

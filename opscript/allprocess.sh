@@ -1,8 +1,7 @@
 #!/bin/bash
 # Script to install chaincode onto a peer node
 
-ROOT=/home/portainer/fabric-samples/
-source ${ROOT}/scripts/utils.sh
+source ${FABRIC_ENV_DEV}/scripts/utils.sh
 
 verifyResult() {
   if [ $1 -ne 0 ]; then
@@ -10,16 +9,16 @@ verifyResult() {
   fi
 }
 
-export FABRIC_CFG_PATH="/home/portainer/fabric-samples/config/"
-export CHANNEL_NAME="channel"
-export CORE_PEER_TLS_ENABLED=true
-export CORE_PEER_LOCALMSPID="Org1MSP"
-export CORE_PEER_TLS_ROOTCERT_FILE=/home/portainer/fabric-samples/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
-export CORE_PEER_MSPCONFIGPATH=/home/portainer/fabric-samples/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/
-export CORE_PEER_ADDRESS=127.0.0.1:7051
-export ORDERER_ADDRESS=127.0.0.1:7050
-export ORDERER_HOSTNAME=orderer.example.com
-export ORDERER_TLS_CA=/home/portainer/fabric-samples/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem
+#export FABRIC_CFG_PATH="/home/portainer/fabric-samples/config/"
+#export CHANNEL_NAME="channel"
+#export CORE_PEER_TLS_ENABLED=true
+#export CORE_PEER_LOCALMSPID="Org1MSP"
+#export CORE_PEER_TLS_ROOTCERT_FILE=/home/portainer/fabric-samples/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
+#export CORE_PEER_MSPCONFIGPATH=/home/portainer/fabric-samples/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/
+#export CORE_PEER_ADDRESS=127.0.0.1:7051
+#export ORDERER_ADDRESS=127.0.0.1:7050
+#export ORDERER_HOSTNAME=orderer.example.com
+#export ORDERER_TLS_CA=/home/portainer/fabric-samples/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem
 
 
 CC_VERSION="$1"
@@ -35,7 +34,7 @@ CC_COLL_CONFIG=${4:-"NA"}
 
 export CC_VERSION
 export CC_NAME
-export CC_SRC_PATH_ROOT=/home/portainer/fabric-samples/chaincode
+export CC_SRC_PATH_ROOT=${FABRIC_ENV_DEV}/chaincode
 export CC_SRC_PATH="${CC_SRC_PATH_ROOT}/"
 export CC_LABEL="${CC_NAME}_${CC_VERSION}"
 export INIT_REQUIRED
