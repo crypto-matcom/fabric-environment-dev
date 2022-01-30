@@ -5,8 +5,12 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+DOCKER=false
+SAMPLES=false
+BINARIES=true
+
 # if version not passed in, default to latest released version
-VERSION=2.4.1
+VERSION=2.2.5
 # if ca version not passed in, default to latest released version
 CA_VERSION=1.5.2
 ARCH=$(echo "$(uname -s|tr '[:upper:]' '[:lower:]'|sed 's/mingw64_nt.*/windows/')-$(uname -m |sed 's/x86_64/amd64/g')" |sed 's/darwin-arm64/darwin-amd64/g')
@@ -131,9 +135,7 @@ pullDockerImages() {
     fi
 }
 
-DOCKER=false
-SAMPLES=false
-BINARIES=true
+
 
 # Parse commandline args pull out
 # version and/or ca-version strings first
