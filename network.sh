@@ -171,9 +171,11 @@ CC_VERSION="1.0.0"
 CC_SEQUENCE=1
 # default image tag
 # IMAGETAG="latest"
+# IMAGETAG="2.2.5"
 IMAGETAG="2.2.0"
 # default ca image tag
 # CA_IMAGETAG="latest"
+#C A_IMAGETAG="1.5.2"
 CA_IMAGETAG="1.4.9"
 # default database
 # DATABASE="leveldb"
