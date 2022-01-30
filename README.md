@@ -43,8 +43,10 @@ cd fabric-environment-dev
 If you want a specific release, pass a version identifier for Fabric and Fabric-CA docker images. The command below demonstrates how to download the latest production releases - Fabric v2.2.5 and Fabric CA v1.5.2
 
 ```bash
-./scripts/bootstrap.sh 2.2.5 1.5.2
+./scripts/bootstrap.sh 2.2.0 1.4.9
 ```
+
+Other ex: ./scripts/bootstrap.sh 2.2.5 1.5.2
 
 ## Running the test network
 
