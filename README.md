@@ -33,6 +33,12 @@ run
 source ~/.profile
 ```
 
+## set hostname
+```bash
+nano /etc/hostname
+... TODO: 
+```
+
 ## Install Binaries
 Navigate to the test network directory by using the following command:
 
