@@ -89,7 +89,7 @@ export CC_NAME=traceability
 
 run
 ```bash
-nano ~/.profile
+source ~/.profile
 ```
 
 ## Interacting with chaincode
