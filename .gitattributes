@@ -1,0 +1,18 @@
+# Set the default behavior for all files.
+* text=auto
+
+# Normalized and converts to
+# native line endings on checkout.
+*.c text
+*.h text
+
+# Convert to CRLF line endings on checkout (Windows OS).
+*.aspx text eol=crlf
+
+# Convert to LF line endings on checkout (Linux & MAC OS).
+*.sh text eol=lf
+*.php text eol=lf
+
+# Binary files.
+*.png binary
+*.jpg binary
