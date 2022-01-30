@@ -87,6 +87,11 @@ export ORDERER_TLS_CA=${FABRIC_ENV_DEV}/organizations/ordererOrganizations/examp
 export CC_NAME=traceability
 ```
 
+run
+```bash
+nano ~/.profile
+```
+
 ## Interacting with chaincode
 From the shell you can invoke the chaincode
 
