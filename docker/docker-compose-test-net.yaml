@@ -3,7 +3,8 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-version: '2'
+# It is only available with Docker Engine version 17.12.0 and higher.
+version: '3.5'
 
 volumes:
   orderer.example.com:
@@ -12,6 +13,7 @@ volumes:
 
 networks:
   test:
+    name: fabric_test
 
 services:
 
@@ -58,7 +60,7 @@ services:
       # the following setting starts chaincode containers on the same
       # bridge network as the peers
       # https://docs.docker.com/compose/networking/
-      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_test
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=fabric_test
       - FABRIC_LOGGING_SPEC=INFO
       # - FABRIC_LOGGING_SPEC=DEBUG
       - CORE_PEER_GOSSIP_ORGLEADER=true

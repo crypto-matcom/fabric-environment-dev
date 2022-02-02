@@ -3,10 +3,12 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-version: '2'
+# It is only available with Docker Engine version 17.12.0 and higher.
+version: '3.5'
 
 networks:
   test:
+    name: fabric_test
 
 services:
   couchdb0:
